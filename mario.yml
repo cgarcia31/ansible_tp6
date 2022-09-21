@@ -1,0 +1,26 @@
+---
+- name: "Install and run supermario docker image"
+  become: no
+  hosts: prod
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+  tasks:
+    - name: Create default containers
+      docker_container:
+        name: "supermario"
+        image: "pengbai/docker-supermario"
+        published_ports: 0.0.0.0:9000:8080
+        state: started
+
+- name: "Open port"
+  become: yes
+  hosts: prod
+  tasks:
+    - name: Open port 9000 firewalld
+      firewalld:
+        port: 9000/tcp
+        permanent: yes
+        state: enabled
+      when: ansible_os_family == "RedHat"
+
+

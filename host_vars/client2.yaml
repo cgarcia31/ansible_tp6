@@ -1,0 +1,2 @@
+ansible_host: 192.168.99.12
+ansible_sudo_pass: vagrant

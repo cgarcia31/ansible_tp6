@@ -1,0 +1,33 @@
+---
+- name: "Installation docker"
+  become: yes
+  hosts: prod
+  tasks:
+        - name: "Installation de docker centos"
+          yum:
+            name: "docker"
+            state: present
+          when: ansible_os_family == "RedHat"
+
+        - name: "Adding group docker"
+          group:
+            name: docker
+            state: present
+
+        - name: "Configure user vagrant"
+          user:
+            name: vagrant
+            append: yes
+            groups: docker
+        
+        - name: "Enable and start service"
+          service:
+            name: docker
+            state: started
+            enabled: yes
+               
+        - name: Install docker python package
+          ansible.builtin.pip:
+            name: docker
+            executable: pip3    
+            
